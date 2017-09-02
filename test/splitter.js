@@ -2,59 +2,39 @@ var Splitter = artifacts.require("./Splitter.sol");
 
 contract('Splitter', function(accounts) {
 
-    // console.log(Splitter.owner)
-    // var contract;
+    var valueToSplit = 2;
 
-    // beforeEach(function(){
-    //     return Splitter.new(accounts[1], accounts[2], {from: accounts[0]})
-    //     .then(function(instance) {
-    //         contract = instance;
-    //     });
-    // });
+    beforeEach(function(){
+        return Splitter.new(accounts[1], accounts[2], {from: accounts[0]})
+        .then(function(instance) {
+            contract = instance;
+        });
+    });
 
-    // it("should be owned by owner", function() {
-    //     return contract.owner({from: accounts[0]})
-    //     .then(function(_owner) {
-    //         assert.strictEqual(_owner, accounts[0], "Contract is not owned by owner")
-    //     });
-    // });
+    it("should be owned by owner", function() {
+        return contract.owner({from: accounts[0]})
+        .then(function(_owner) {
+            assert.strictEqual(_owner, accounts[0], "Contract is not owned by owner")
+        });
+    });
 
     it("should split amount sent", function(){
-        return Splitter.new(accounts[1], accounts[2], {from: accounts[0]})
-        .then(function(contract) {
-            var balance0 = web3.fromWei(web3.eth.getBalance(accounts[0]));
-            var balance1 = web3.fromWei(web3.eth.getBalance(accounts[1]));
-            var balance2 = web3.fromWei(web3.eth.getBalance(accounts[2]));
-            console.log(balance0.toNumber());
-            console.log(balance1.toNumber());
-            console.log(balance2.toNumber());
+        var balance1Before = web3.fromWei(web3.eth.getBalance(accounts[1]));
+        var balance2Before = web3.fromWei(web3.eth.getBalance(accounts[2]));
 
-            return contract.split({from: accounts[0], value:1000000000000000000})
-            .then(function(transactionReceipt) {
+        return contract.split({from: accounts[0], value: web3.toWei(valueToSplit, "ether")})
+        .then(function(transactionReceipt) {
 
+            var balance1After = web3.fromWei(web3.eth.getBalance(accounts[1]));
+            var balance2After = web3.fromWei(web3.eth.getBalance(accounts[2]));
 
-                var balance0 = web3.fromWei(web3.eth.getBalance(accounts[0]));
-                var balance1 = web3.fromWei(web3.eth.getBalance(accounts[1]));
-                var balance2 = web3.fromWei(web3.eth.getBalance(accounts[2]));
-                console.log(balance0.toNumber());
-                console.log(balance1.toNumber());
-                console.log(balance2.toNumber());
-            });
+            assert.strictEqual(balance1Before.toNumber() + valueToSplit/2, balance1After.toNumber(), "Transfer not correctly splitted - Account 1")
+            assert.strictEqual(balance2Before.toNumber() + valueToSplit/2, balance2After.toNumber(), "Transfer not correctly splitted - Account 2")
 
 
-        })
+        });
 
-
-
-
-        // return contract.split({from: accounts[0], value: 1})
-        // .then(function(transactionReceipt) {
-        //     console.log( contract.account1({from: accounts[0]}));
-        //     var balance =  web3.fromWei(web3.eth.getBalance(accounts[1]));
-        //     console.log(balance);
-
-        // })
-    })
+    });
 
 });
 
