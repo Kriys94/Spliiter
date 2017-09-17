@@ -15,6 +15,10 @@ contract Splitter {
         require(msg.sender != receiver1);
         require(receiver1 != receiver2);
         require(msg.sender != receiver2);
+
+        require(msg.sender != 0);
+        require(receiver1 != 0);
+        require(receiver2 != 0);
         
         owner = msg.sender;
         account1 = receiver1;
