@@ -5,8 +5,12 @@ contract Splitter {
     address public owner;
     address public account1;
     address public account2;
+
+    event LogAmountSplitted(uint value, address account1, address account2);
     
-    function Splitter(address receiver1, address receiver2) {
+    function Splitter(address receiver1, address receiver2) 
+        public
+    {
         
         require(msg.sender != receiver1);
         require(receiver1 != receiver2);
@@ -19,6 +23,7 @@ contract Splitter {
     }
     
     function split()
+        public
         payable
         returns(bool)
     {
@@ -28,6 +33,8 @@ contract Splitter {
         
         account1.transfer(msg.value / 2);
         account2.transfer(msg.value / 2);
+
+        LogAmountSplitted(msg.value / 2, account1, account2);
         
         return(true);   
         

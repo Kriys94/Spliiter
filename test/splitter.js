@@ -2,7 +2,9 @@ var Splitter = artifacts.require("./Splitter.sol");
 
 contract('Splitter', function(accounts) {
 
-    var valueToSplit = 2;
+    var valueToSplit = 3.333333;
+
+    console.log("valueToSplit", valueToSplit);
 
     beforeEach(function(){
         return Splitter.new(accounts[1], accounts[2], {from: accounts[0]})
@@ -28,6 +30,7 @@ contract('Splitter', function(accounts) {
             var balance1After = web3.fromWei(web3.eth.getBalance(accounts[1]));
             var balance2After = web3.fromWei(web3.eth.getBalance(accounts[2]));
 
+            console.log("valueSplitted", valueToSplit/2);
             assert.strictEqual(balance1Before.toNumber() + valueToSplit/2, balance1After.toNumber(), "Transfer not correctly splitted - Account 1")
             assert.strictEqual(balance2Before.toNumber() + valueToSplit/2, balance2After.toNumber(), "Transfer not correctly splitted - Account 2")
 
