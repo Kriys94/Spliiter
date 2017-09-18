@@ -24,7 +24,7 @@ contract('Splitter', function(accounts) {
         var balance1Before = web3.fromWei(web3.eth.getBalance(accounts[1]));
         var balance2Before = web3.fromWei(web3.eth.getBalance(accounts[2]));
 
-        return contract.split({from: accounts[0], value: web3.toWei(valueToSplit, "ether")})
+        return contract.split({from: accounts[0], value: valueToSplit})
         .then(function(transactionReceipt) {
 
             var balance1After = web3.fromWei(web3.eth.getBalance(accounts[1]));
